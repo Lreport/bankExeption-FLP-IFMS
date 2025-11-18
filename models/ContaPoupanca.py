@@ -9,6 +9,22 @@ class ContaPoupanca(Conta, Rentavel):
         self._rendimentoAnual = rendimentoAnual
         self._dataAniversario = datetime.now().day
 
+    @property
+    def rendimentoAnual(self):
+        return self._rendimentoAnual
+
+    @rendimentoAnual.setter
+    def rendimentoAnual(self, valor):
+        self._rendimentoAnual = valor
+
+    @property
+    def dataAniversario(self):
+        return self._dataAniversario
+
+    @dataAniversario.setter
+    def dataAniversario(self, valor):
+        self._dataAniversario = valor
+
     def obterRendimento(self):
         pass
 
