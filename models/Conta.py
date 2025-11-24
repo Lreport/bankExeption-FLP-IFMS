@@ -1,7 +1,11 @@
 from abc import ABC
-from typing import List
-from models import Transacao, Cliente
+from typing import List, TYPE_CHECKING
+from excecoes import ErroValorInvalido
 from models.abstratas import Autenticavavel
+
+if TYPE_CHECKING:
+    from models.Cliente import Cliente
+    from models.Transacao import Transacao
 
 
 class Conta(Autenticavavel, ABC):
@@ -47,3 +51,13 @@ class Conta(Autenticavavel, ABC):
     @property
     def transacoes(self):
         return self._transacoes
+
+    def autenticar(self, senha: str) -> bool:
+        """Valida a senha informada pelo cliente."""
+        return self._senha == senha
+
+    @staticmethod
+    def _validar_valor(valor: float) -> None:
+        """Garante que o valor utilizado em operações seja positivo."""
+        if valor <= 0:
+            raise ErroValorInvalido(valor)
