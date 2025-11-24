@@ -1,5 +1,8 @@
 from datetime import datetime
-from models import Conta
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from models.Conta import Conta
 
 class Transacao:
     def __init__(self, tipo:str, valor:float, conta: 'Conta'):
