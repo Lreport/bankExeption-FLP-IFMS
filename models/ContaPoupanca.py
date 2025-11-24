@@ -1,6 +1,12 @@
-import datetime
-from models.Conta import Cliente, Conta
-from models.abstratas import Rentavel
+from datetime import datetime
+from typing import TYPE_CHECKING
+from excecoes import ErroSaldoInsuficiente, ErroValorInvalido
+from models.Conta import Conta
+from models.Transacao import Transacao
+from models.abstratas.Rentavel import Rentavel
+
+if TYPE_CHECKING:
+    from models.Cliente import Cliente
 
 
 class ContaPoupanca(Conta, Rentavel):
@@ -25,11 +31,19 @@ class ContaPoupanca(Conta, Rentavel):
     def dataAniversario(self, valor):
         self._dataAniversario = valor
 
-    def obterRendimento(self):
-        pass
+    def obterRendimento(self) -> float:
+        """Retorna o rendimento mensal baseado no percentual anual informado."""
+        rendimento_mensal = self._rendimentoAnual / 12
+        return self._saldo * rendimento_mensal
 
-    def sacar(self):
-        pass
+    def sacar(self, valor: float):
+        self._validar_valor(valor)
+        if valor > self._saldo:
+            raise ErroSaldoInsuficiente(self._saldo, 0.0, valor)
+        self._saldo -= valor
+        self._transacoes.append(Transacao("Saque", valor, self))
 
-    def depositar(self):
-        pass
+    def depositar(self, valor: float):
+        self._validar_valor(valor)
+        self._saldo += valor
+        self._transacoes.append(Transacao("Depósito", valor, self))
