@@ -1,5 +1,8 @@
-from typing import List
-from models import Conta
+from typing import List, TYPE_CHECKING
+from excecoes import ErroIdadeInvalida
+
+if TYPE_CHECKING:
+    from models.Conta import Conta
 
 
 class Cliente:
@@ -22,6 +25,8 @@ class Cliente:
 
     @idade.setter
     def idade(self, valor):
+        if valor < 0:
+            raise ErroIdadeInvalida(valor)
         self._idade = valor
 
     @property
